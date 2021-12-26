@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+    <!-- 必须先导入jquery.min.js，jquery.easyui.min.js依赖jquery.min.js-->
+    <script type="text/javascript" th:src="@{/easyui/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+
+
+    <script type="text/javascript" th:src="@{/js/datagrid-detailview.js}"></script>
+    <script type="text/javascript" th:src="@{/js/datagrid-groupview.js}"></script>
+
+</head>
+<body>
+
+
+<table id="tab"></table>
+
+<!--自定义table中的工具栏-->
+<div id="query">
+   <!-- 搜索框-->
+    <span>标题</span>
+    <input name="title" id="title" class="easyui-textbox"/>
+    <span>价格起始范围</span>
+    <input name="priceStart" id="priceStart" class="easyui-textbox"/>
+    <span>价格结束范围</span>
+    <input name="priceEnd" id="priceEnd" class="easyui-textbox"/>
+    <span>详细描述</span>
+    <input name="description" id="description" class="easyui-textbox"/>
+    <button type="button" onclick="search()">查询</button>
+</div>
+
+
+
+<script  type="text/javascript" th:inline="javascript">
+    function search() {
+        //reload从当前页开始重新查询,之后进行下一页跳转的时候也会携带该参数
+        $("#tab").datagrid("reload",{
+            "title":$("#title").textbox("getValue"),
+            "priceStart":$("#priceStart").textbox("getValue"),
+            "priceEnd":$("#priceEnd").textbox("getValue"),
+            "description":$("#description").textbox("getValue")
+        });
+    }
+    // 页面刷新会执行的方法,第一次加载数据
+    $(function () {
+        /*<![CDATA[*/
+        var path=/*[[@{/csdn/getCoursePage}]]*/
+            /*]]>*/
+            console.log(path)
+        //初始化数据列表
+        $("#tab").datagrid({
+            url:path, //数据列表数据来源url
+            queryParams:{"priceStart":"","priceEnd":"","title":"","description":""}, //额外的查询参数
+            title:"数据列表",//表格名称
+            pageSize:2,//设置分页的页数
+            pageList:[2,4,8,16],//设置可选的分页页数
+            iconCls:"iocn-save",//小图标
+            rownumbers: true, //是否显示列数 默认false不显示
+            fitColumns:true,//展开数据，默认是false,不进行展开
+            // checkOnSelect:true,
+            onCheck:function(rowIndex,rowData){
+                console.log(rowIndex) //value就是groupField中分组的值
+                console.log(rowData) //rows的值是该分组下的全部数据
+            },
+            onSelect:function(rowIndex,rowData){
+                console.log(rowIndex) //value就是groupField中分组的值
+                console.log(rowData) //rows的值是该分组下的全部数据
+            },
+            nowrap:false,//如果为true，则在同一行中显示数据。设置为true可以提高加载性能。默认为true
+            columns:[
+                [//columns设置数据列表的列属性  [[要换行写，因为在thymeleaf中连续的[[有特殊作用
+                    {field: 'ck',title: '全选',checkbox : true, sortable: false},  //添加checkbox
+                    {field:"title",title:"标题",width:100,align:"center"},
+                    {field:"ext",title:"讲师",width:100,align:"center",formatter:function(value,row,index){
+                            //如果使用了formatter方法，formatter方法的返回值取代field的值进行展示
+                            //field不允许嵌套取值，如field:"user.name" 是不行的，这时候就必须使用formatter方法
+                            // console.log("value:"+value);//当前列值
+                            // console.log(row);//当前行json
+                            // console.log("index:"+index);//当前索引号
+                            if(value!=undefined)
+                            {
+                                return row['ext']['lecturerName'];
+                            }
+                            else
+                            {
+                                return "ok"
+                            }
+                        }
+                    },
+                    {field:"price",title:"价格",width:100,align:"center"},
+                    {field:"views",title:"用户查看次数",width:100,align:"center"},
+                    {field:"description",title:"详细描述",width:100,align:"center"},
+                    {field:"url",title:"访问地址",width:100,align:"center"},
+
+                ]
+            ],
+            pagination:true,//启用分页，每次跳转页面时会发送一个ajax请求，会自动添加参数page和rows,page表示查询的页号，rows表示一页的数据量
+            singleSelect:false,//开启单选,默认是多选模式
+            toolbar:"#query"//toolbar可以使用内置的按钮，也可以嵌入写好的工具栏
+        });
+    })
+</script>
+
+
+
+</body>
+</html>

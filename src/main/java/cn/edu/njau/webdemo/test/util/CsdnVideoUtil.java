@@ -134,7 +134,7 @@ public class CsdnVideoUtil {
         System.out.println("课程总共"+lessonListSize+"节");
         for(int i=startIndex;i<=endIndex;i++)
         {
-            if(i>lessonListSize-1)
+            if(i>lessonListSize)
             {
                 break;
             }

@@ -4,6 +4,7 @@ spring:
     rest:
       uris: http://127.0.0.1:9001,http://127.0.0.1:9002,http://127.0.0.1:9003
 
+
 server:
   port: 9090
 
