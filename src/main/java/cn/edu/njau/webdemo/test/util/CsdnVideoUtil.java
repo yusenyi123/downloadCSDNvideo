@@ -149,9 +149,11 @@ public class CsdnVideoUtil {
             String playUrl = map.get("playUrl");
             String saveVideoName = map.get("saveVideoName");
             saveVideoName=saveVideoName.replaceAll(" ","");
+            saveVideoName=saveVideoName.replaceAll("&","和");
+
             String title=syllabusMap.get(String.valueOf(i-1));
             title=title.replaceAll(" ","");
-
+            title=title.replaceAll("&","和");
             if(is_upload_video==0)
             {
                 System.out.println("视频id为"+lesson_id+"的视频没有上传");
@@ -495,6 +497,14 @@ public class CsdnVideoUtil {
         printList(inputStrList);
         System.out.println("ffmpeg程序的err输出");
         printList(errorStrList);
+        if(errorStrList.size()>0)
+        {
+            int charIndex=saveVideoName.indexOf('-');
+            saveVideoName=saveVideoName.substring(0,charIndex);
+            downloadVideoByN_m3u8DL(ffmpegPath,playUrl,saveVideoName,videoDirName);
+            return;
+        }
+
         String videoFilePath=workPath+"\\"+saveVideoName+".mp4";
         System.out.println("下载的视频路径:"+videoFilePath);
         File videoFile=new File(videoFilePath);

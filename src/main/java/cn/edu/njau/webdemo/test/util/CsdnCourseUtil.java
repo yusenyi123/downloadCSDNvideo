@@ -13,6 +13,13 @@ import java.io.IOException;
 public class CsdnCourseUtil {
 
 
+    public static void main(String[] args) {
+        String str="123&43";
+        str=str.replaceAll("&","和");
+        System.out.println(str);
+    }
+
+
     public static void  saveCSDNCourseToEs(RestHighLevelClient restHighLevelClient,String cookie,String saveIndexName,int pageStartIndex,int pageEndIndex) throws IOException { ;
         for (int i = pageStartIndex; i <= pageEndIndex; i++) {
             saveOneListToEs(restHighLevelClient,cookie,saveIndexName, i);
@@ -44,9 +51,11 @@ public class CsdnCourseUtil {
             }
             String lecturerName = ext.getString("lecturerName");
             int views = ext.getIntValue("views");
+            int lesson = ext.getIntValue("lesson");
             dataListJSONObject.put("price",intPrice);
             dataListJSONObject.put("lecturerName",lecturerName);
             dataListJSONObject.put("views",views);
+            dataListJSONObject.put("lesson",lesson);
             int courseType = ext.getIntValue("courseType");
             System.out.println(goodsId+":"+isShowStudyVipLogo);
             if (isShowStudyVipLogo && courseType==0)

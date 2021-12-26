@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>es中的csdn课程数据</title>
 
 
     <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
@@ -78,7 +78,8 @@
                 [//columns设置数据列表的列属性  [[要换行写，因为在thymeleaf中连续的[[有特殊作用
                     {field: 'ck',title: '全选',checkbox : true, sortable: false},  //添加checkbox
                     {field:"title",title:"标题",width:100,align:"center"},
-                    {field:"ext",title:"讲师",width:100,align:"center",formatter:function(value,row,index){
+                    {field:"lecturerName",title:"讲师",width:100,align:"center"},
+                    {field:"ext",title:"课程数",width:100,align:"center",formatter:function(value,row,index){
                             //如果使用了formatter方法，formatter方法的返回值取代field的值进行展示
                             //field不允许嵌套取值，如field:"user.name" 是不行的，这时候就必须使用formatter方法
                             // console.log("value:"+value);//当前列值
@@ -86,7 +87,7 @@
                             // console.log("index:"+index);//当前索引号
                             if(value!=undefined)
                             {
-                                return row['ext']['lecturerName'];
+                                return row['ext']['lesson'];
                             }
                             else
                             {
@@ -98,6 +99,7 @@
                     {field:"views",title:"用户查看次数",width:100,align:"center"},
                     {field:"description",title:"详细描述",width:100,align:"center"},
                     {field:"url",title:"访问地址",width:100,align:"center"},
+
 
                 ]
             ],
